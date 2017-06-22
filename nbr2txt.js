@@ -98,8 +98,8 @@ function process(input)
         prefix += '0';
     }
     input = prefix + input;
-//          input = input.split("").reverse().join("");
     console.log('input: ' + input);
+
     var tensUnits = input.substring(input.length-2,input.length);
     var hundreds = input.charAt(input.length-3);
     var thousands = input.substring(input.length - 6, input.length-3);
@@ -134,7 +134,7 @@ function processTensAndUnits(arg)
         var tens = arg.charAt(0);
         var units = arg.charAt(1);
     }
-    console.log('arg = ' + arg + ' | tens = ' + tens + ' | units = ' + units);
+    //console.log('arg = ' + arg + ' | tens = ' + tens + ' | units = ' + units);
     var ret = '';
     if(tens == '0')
     {
