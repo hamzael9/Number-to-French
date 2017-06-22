@@ -58,7 +58,8 @@ function inputChange() // function to handle change event in the input
     {
         var tmp = input.split(',');
         var preCommaInput = tmp[0];
-        var postCommaInput = tmp[1]; // zeros in the end are trimmed
+        var postCommaInput = tmp[1]; 
+        // zeros in the end are trimmed
         for(var i = postCommaInput.length-1; i > 0 ; i--)
         {
             if(postCommaInput[i] != '0')
@@ -67,8 +68,17 @@ function inputChange() // function to handle change event in the input
                 break;
             }
         }
+        // zeros in the beginning are taken into account
+        var zeros = '';
+        for (var i = 0 ; i < postCommaInput ; i++)
+        {
+            if(postCommaInput[i] == '0')
+                zeros += 'zero ';
+            else
+                break;
+        }
         res = process(preCommaInput);
-        res += ' [virgule] ' + process(postCommaInput);
+        res += ' [virgule] ' + zeros + process(postCommaInput);
     }
     else
     {
