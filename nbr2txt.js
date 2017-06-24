@@ -46,12 +46,19 @@ numbersMap.set('40',FOURTY);
 numbersMap.set('50',FIFTY);
 numbersMap.set('60',SIXTY);
 
+const NUMBER_MAX_LENGTH = 20; // maximum length of the number
+
 function inputChange() // function to handle change event in the input
 {
     var input = document.getElementById('myinput').value;
     // cleaning spaces
-    input = input.trim();
-    input = input.replace(/\s/g, '');
+    input = cleanInput(input);
+
+    if ( input < 0 )
+    {
+        handleInputError();
+        return;
+    }
 
     var res = '';
     if(input.includes(',')) // if number has a comma, separate it and handle each part alone
@@ -89,11 +96,27 @@ function inputChange() // function to handle change event in the input
     document.getElementById('result').innerHTML= res;
 }
 
+function cleanInput(arg)
+{
+    arg = arg.trim();
+    arg = arg.replace(/\s/g, '');
+    if ( arg.length > NUMBER_MAX_LENGTH )
+        return -1;
+    else
+        return arg;
+}
+
+function handleInputError()
+{
+    console.error('input error !');
+    document.getElementById('result').innerHTML = 'Input Error';
+}
+
 function process(input)
 {
     console.log('input value : ' + input);
     var prefix = '';
-    for (var i = 0 ; i < 16 - input.length ; i ++)
+    for (var i = 0 ; i < NUMBER_MAX_LENGTH - input.length ; i ++)
     {
         prefix += '0';
     }
@@ -104,13 +127,15 @@ function process(input)
     var hundreds = input.charAt(input.length-3);
     var thousands = input.substring(input.length - 6, input.length-3);
     var millions= input.substring(input.length - 9, input.length-6);
-    var billions= input.substring(input.length - 12, input.length-9);
-    var trillions= input.substring(input.length - 15, input.length-12);
-    console.log('thousands: ' + thousands + ' | hundreds : ' + hundreds + ' | tens : ' + tensUnits);
+    var milliards= input.substring(input.length - 12, input.length-9);
+    var billions= input.substring(input.length - 15, input.length-12);
+    var trillions= input.substring(input.length - 18, input.length-15);
+ //   console.log('thousands: ' + thousands + ' | hundreds : ' + hundreds + ' | tens : ' + tensUnits);
 
     var res = '';
     res += ' ' + processTrillions(trillions);
     res += ' ' + processBillions(billions);
+    res += ' ' + processMilliards(milliards);
     res += ' ' + processMillions(millions);
     res += ' ' + processThousands(thousands);
     res += ' ' + processHundreds(hundreds);
@@ -240,10 +265,22 @@ function processMillions(arg)
     var ret = '';
     if(arg === '000')
         return ret;
-    if(arg === '1')
+    if(arg === '001')
         ret += ' un million';
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' millions';
+    return ret;
+}
+
+function processMilliards(arg)
+{
+    var ret = '';
+    if(arg === '000')
+        return ret;
+    if(arg === '001')
+        ret += ' un milliard';
+    else
+        ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' milliards';
     return ret;
 }
 
@@ -252,7 +289,7 @@ function processBillions(arg)
     var ret = '';
     if(arg === '000')
         return ret;
-    if(arg === '1')
+    if(arg === '001')
         ret += ' un billion';
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' billions';
@@ -264,7 +301,7 @@ function processTrillions(arg)
     var ret = '';
     if(arg === '000')
         return ret;
-    if(arg === '1')
+    if(arg === '001')
         ret += ' un trillion';
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' trillions';
