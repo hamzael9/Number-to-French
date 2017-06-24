@@ -48,6 +48,9 @@ numbersMap.set('60',SIXTY);
 
 const NUMBER_MAX_LENGTH = 20; // maximum length of the number
 
+// start by clearing the input
+document.getElementById('myinput').value = '';
+
 function inputChange() // function to handle change event in the input
 {
     var input = document.getElementById('myinput').value;
