@@ -1,0 +1,29 @@
+{
+  "name": "number-to-french",
+  "version": "1.0.0",
+  "description": "This module converts a given number to french words",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hamzafox/Number-to-French.git"
+  },
+  "keywords": [
+    "number",
+    "french",
+    "converter",
+    "words"
+  ],
+  "author": "Hamza El Bouatmani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hamzafox/Number-to-French/issues"
+  },
+  "homepage": "https://github.com/hamzafox/Number-to-French#readme",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.1"
+  }
+}

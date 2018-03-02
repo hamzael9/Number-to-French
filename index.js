@@ -23,7 +23,7 @@ const FIFTY = 'cinquente';
 const SIXTY = 'soixante';
 
 
-var numbersMap = new Map();
+let numbersMap = new Map();
 numbersMap.set('1',ONE);
 numbersMap.set('2',TWO);
 numbersMap.set('3',THREE);
@@ -48,29 +48,27 @@ numbersMap.set('60',SIXTY);
 
 const NUMBER_MAX_LENGTH = 20; // maximum length of the number
 
-// start by clearing the input
-document.getElementById('myinput').value = '';
 
-function inputChange() // function to handle change event in the input
+const convert = (input) => // Main function which is the entry point fo the module
 {
-    var input = document.getElementById('myinput').value;
+
     // cleaning spaces
-    input = cleanInput(input);
+    input = cleanInput(input.toString());
+
 
     if ( input < 0 )
     {
-        handleInputError();
-        return;
+        return false;
     }
 
-    var res = '';
+    let res = '';
     if(input.includes(',')) // if number has a comma, separate it and handle each part alone
     {
-        var tmp = input.split(',');
-        var preCommaInput = tmp[0];
-        var postCommaInput = tmp[1]; 
+        let tmp = input.split(',');
+        let preCommaInput = tmp[0];
+        let postCommaInput = tmp[1];
         // zeros in the end are trimmed
-        for(var i = postCommaInput.length-1; i > 0 ; i--)
+        for(let i = postCommaInput.length-1; i > 0 ; i--)
         {
             if(postCommaInput[i] != '0')
             {
@@ -79,8 +77,8 @@ function inputChange() // function to handle change event in the input
             }
         }
         // zeros in the beginning are taken into account
-        var zeros = '';
-        for (var i = 0 ; i < postCommaInput ; i++)
+        let zeros = '';
+        for (let i = 0 ; i < postCommaInput ; i++)
         {
             if(postCommaInput[i] == '0')
                 zeros += 'zero ';
@@ -88,54 +86,50 @@ function inputChange() // function to handle change event in the input
                 break;
         }
         res = process(preCommaInput);
-        res += ' [virgule] ' + zeros + process(postCommaInput);
+        res += ' virgule ' + zeros + process(postCommaInput);
     }
     else
     {
         res = process(input);
     }
 
-    console.log('result : ' + res);
-    document.getElementById('result').innerHTML= res;
-}
+//  console.log('result : ' + res);
+    return res;
+};
 
-function cleanInput(arg)
+const cleanInput = (arg) => // Checks and cleans the inputed value that is supposed to be converted to words
 {
     arg = arg.trim();
     arg = arg.replace(/\s/g, '');
+    arg = arg.replace(/\./g, ',')
     if ( arg.length > NUMBER_MAX_LENGTH )
         return -1;
     else
         return arg;
-}
+};
 
-function handleInputError()
-{
-    console.error('input error !');
-    document.getElementById('result').innerHTML = 'Input Error';
-}
 
-function process(input)
+const process = (input) => // main function that will start the conversion
 {
-    console.log('input value : ' + input);
-    var prefix = '';
-    for (var i = 0 ; i < NUMBER_MAX_LENGTH - input.length ; i ++)
+
+    let prefix = '';
+    for (let i = 0 ; i < NUMBER_MAX_LENGTH - input.length ; i ++)
     {
         prefix += '0';
     }
     input = prefix + input;
-    console.log('input: ' + input);
 
-    var tensUnits = input.substring(input.length-2,input.length);
-    var hundreds = input.charAt(input.length-3);
-    var thousands = input.substring(input.length - 6, input.length-3);
-    var millions= input.substring(input.length - 9, input.length-6);
-    var milliards= input.substring(input.length - 12, input.length-9);
-    var billions= input.substring(input.length - 15, input.length-12);
-    var trillions= input.substring(input.length - 18, input.length-15);
- //   console.log('thousands: ' + thousands + ' | hundreds : ' + hundreds + ' | tens : ' + tensUnits);
 
-    var res = '';
+    let tensUnits = input.substring(input.length-2,input.length);
+
+    let hundreds = input.charAt(input.length-3);
+    let thousands = input.substring(input.length - 6, input.length-3);
+    let millions= input.substring(input.length - 9, input.length-6);
+    let milliards= input.substring(input.length - 12, input.length-9);
+    let billions= input.substring(input.length - 15, input.length-12);
+    let trillions= input.substring(input.length - 18, input.length-15);
+
+    let res = '';
     res += ' ' + processTrillions(trillions);
     res += ' ' + processBillions(billions);
     res += ' ' + processMilliards(milliards);
@@ -145,13 +139,13 @@ function process(input)
     res += ' ' + processTensAndUnits(tensUnits);
     res = res.trim();
     return res;
-}
+};
 
-function processTensAndUnits(arg)
+const processTensAndUnits = (arg) =>
 {
-    var tens = '';
-    var units = '';
-    console.log('arg length : ' + arg.length);
+    let tens = '';
+    let units = '';
+
     if(arg.length === 1)
     {
         tens = '0';
@@ -159,15 +153,15 @@ function processTensAndUnits(arg)
     }
     else
     {
-        var tens = arg.charAt(0);
-        var units = arg.charAt(1);
+        tens = arg.charAt(0);
+        units = arg.charAt(1);
     }
-    //console.log('arg = ' + arg + ' | tens = ' + tens + ' | units = ' + units);
-    var ret = '';
+
+    let ret = '';
     if(tens == '0')
     {
         switch(units)
-        {  
+        {
             case '1': ret = ONE; break;
             case '2': ret = TWO; break;
             case '3': ret = THREE; break;
@@ -228,7 +222,7 @@ function processTensAndUnits(arg)
             }
             if(units === '1')
                 ret += ' et ';
-            
+
             if(tens === '8')
                 ret += ' ' + numbersMap.get(units);
             else
@@ -236,12 +230,11 @@ function processTensAndUnits(arg)
         }
     }
     return ret;
-}
+};
 
-
-function processHundreds(arg)
+const processHundreds = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg == '0')
         return ret;
     if(arg === '1')
@@ -249,11 +242,11 @@ function processHundreds(arg)
     else
         ret += numbersMap.get(arg) + ' cents';
     return ret;
-}
+};
 
-function processThousands(arg)
+const processThousands = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg === '000')
         return ret;
     if(arg === '001')
@@ -261,11 +254,11 @@ function processThousands(arg)
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' milles';
     return ret;
-}
+};
 
-function processMillions(arg)
+const processMillions = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg === '000')
         return ret;
     if(arg === '001')
@@ -273,11 +266,11 @@ function processMillions(arg)
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' millions';
     return ret;
-}
+};
 
-function processMilliards(arg)
+const processMilliards = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg === '000')
         return ret;
     if(arg === '001')
@@ -285,11 +278,11 @@ function processMilliards(arg)
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' milliards';
     return ret;
-}
+};
 
-function processBillions(arg)
+const processBillions = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg === '000')
         return ret;
     if(arg === '001')
@@ -297,11 +290,11 @@ function processBillions(arg)
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' billions';
     return ret;
-}
+};
 
-function processTrillions(arg)
+const processTrillions = (arg) =>
 {
-    var ret = '';
+    let ret = '';
     if(arg === '000')
         return ret;
     if(arg === '001')
@@ -309,4 +302,6 @@ function processTrillions(arg)
     else
         ret += processHundreds(arg.charAt(0)) + ' ' + processTensAndUnits(arg.substring(1,3)) + ' trillions';
     return ret;
-}
+};
+
+module.exports = convert;
