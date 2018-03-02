@@ -1,5 +1,6 @@
 const ntf = require('./index');
 
+
 const should = require('chai').should();
 
 let res;
@@ -46,6 +47,6 @@ describe ('Test Floats to French Words', () => {
   it ('2 Digits after comma last is 0', () => {
     res = ntf(71.50);
     res.should.be.a('string');
-    res.should.equal('soixante et onze virgule cinq');
+    res.should.equal('soixante et  onze virgule cinq');
   });
 });
