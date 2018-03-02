@@ -4,9 +4,11 @@ Module to convert Numbers ( Integers and Floats ) to French Words.
 
 ## How to use
 
-cost ntf = require('number-to-french');
+
 
 ``` Javascript
+const ntf = require('number-to-french');
+
 let res;
 
 res = ntf(155); // cent cinquente cinq
